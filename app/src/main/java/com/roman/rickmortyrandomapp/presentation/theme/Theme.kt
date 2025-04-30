@@ -1,6 +1,5 @@
-package com.roman.rickmortyrandomapp.ui.theme
+package com.roman.rickmortyrandomapp.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

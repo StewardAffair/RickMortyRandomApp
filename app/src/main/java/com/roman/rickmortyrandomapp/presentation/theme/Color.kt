@@ -1,4 +1,4 @@
-package com.roman.rickmortyrandomapp.ui.theme
+package com.roman.rickmortyrandomapp.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
