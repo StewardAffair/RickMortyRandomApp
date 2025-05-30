@@ -1,4 +1,4 @@
-package com.roman.rickmortyrandomapp
+package com.roman.rickmortyrandomapp.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -35,7 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.roman.rickmortyrandomapp.ui.theme.RickMortyRandomAppTheme
+import com.roman.rickmortyrandomapp.CharacterUI
+import com.roman.rickmortyrandomapp.Episode
+import com.roman.rickmortyrandomapp.Status
+import com.roman.rickmortyrandomapp.data.Api
+import com.roman.rickmortyrandomapp.presentation.theme.RickMortyRandomAppTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
