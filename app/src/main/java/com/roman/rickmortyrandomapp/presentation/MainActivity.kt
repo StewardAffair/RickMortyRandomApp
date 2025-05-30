@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,15 +34,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.roman.rickmortyrandomapp.CharacterUI
-import com.roman.rickmortyrandomapp.Episode
 import com.roman.rickmortyrandomapp.Status
-import com.roman.rickmortyrandomapp.data.Api
 import com.roman.rickmortyrandomapp.presentation.theme.RickMortyRandomAppTheme
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -64,36 +64,30 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) { innerPadding ->
-                    Screen(innerPadding, testCharacter)
+
+                    val viewModel by viewModel<MainViewModel>()
+                    val state by viewModel.state.collectAsStateWithLifecycle()
+                    Screen(innerPadding, state, viewModel::onButtonClicked)
                 }
             }
         }
     }
 }
 
-val testCharacter = CharacterUI(
-    id = 1,
-    name = "Roman",
-    status = Status.ALIVE,
-    url = "https://avatar.iran.liara.run/public/1",
-    episodes = listOf(
-        Episode(id = 1, name = "Episode 1", url = ""),
-        Episode(id = 2, name = "Episode 2", url = ""),
-        Episode(id = 3, name = "Episode 3", url = ""),
-        Episode(id = 4, name = "Episode 4", url = ""),
-        Episode(id = 5, name = "Episode 5", url = ""),
-    )
-)
-
 @Composable
-fun Screen(innerPadding: PaddingValues, testCharacter: CharacterUI) {
+fun Screen(innerPadding: PaddingValues, state: UIState, onClick: () -> Unit) {
     Column(
         modifier =
             Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
     ) {
-        CharacterCard(testCharacter)
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        }
+        if (state.characterUI != null) {
+            CharacterCard(state.characterUI)
+        }
         Button(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -102,7 +96,7 @@ fun Screen(innerPadding: PaddingValues, testCharacter: CharacterUI) {
                 containerColor = Color("#BB352E".toColorInt()),
                 contentColor = Color.White
             ),
-            onClick = { }) {
+            onClick = { onClick() }) {
             Text("Generate New Character")
         }
     }
